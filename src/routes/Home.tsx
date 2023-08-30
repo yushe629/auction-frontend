@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Web3Context } from "../web3Context";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import { Faucet } from "../components/Faucet";
 
 export const Home = () => {
   const context = useContext(Web3Context);
@@ -25,6 +26,7 @@ export const Home = () => {
       >
         increment
       </Button>
+      <Faucet />
     </div>
   );
 };

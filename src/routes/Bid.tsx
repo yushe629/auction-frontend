@@ -1,16 +1,20 @@
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { Alchemy, Nft } from "alchemy-sdk";
+import { ethers } from "ethers";
+import { FhevmInstance } from "fhevmjs";
 import { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import encErc20Abi from "../abi/EncryptedERC20Abi.json";
 import { alchemySettings } from "../config/alchemy";
+import { contractAddressMap } from "../contracts";
 import { Web3Context } from "../web3Context";
 
-// const useStyles = makeStyles((theme) => ({
-//   nftImg: {
-//     objectFit: "cover",
-//     maxWidth: "30vw",
-//     display: "block"
-//   },
-// }));
+
+type NftSearchInput = {
+  address: string;
+  tokenId: string;
+}
+
 
 const alchemy = new Alchemy(alchemySettings);
 
@@ -18,8 +22,16 @@ const contractAddress = "0xfa53f3f7e58885eea510ff2d8a040b2a8b9f041e";
 const tokenId = 0;
 
 export const Bid = () => {
-  const { signer, nftList, setNftList } = useContext(Web3Context);
+  const { signer, instance, getTokenSignature } = useContext(Web3Context);
   // const classes = useStyles()
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<NftSearchInput>();
+
 
   const [targetNft, setTargetNft] = useState<Nft | null>(null);
   const [isGettingNftInfo, setIsGettingNftInfo] = useState(false);
@@ -30,11 +42,34 @@ export const Bid = () => {
     setIsGettingNftInfo(false);
   };
 
-  console.log(nftList);
+  const onSubmit = async () => {
+    await getNft()
+  }
+
+  const encryptedBid = async (amount: number) => {
+    const address = contractAddressMap.EncryptedERC20
+    // use readonly data
+    const { signature, publicKey } = await getTokenSignature(address, signer.address)
+    const encryptedAmount = instance.encrypt32(amount)
+  
+    const contract = new ethers.Contract(address, encErc20Abi, signer)
+  
+    const tx = await contract.mint(encryptedAmount);
+    const receipt = await tx.wait();
+    console.log(receipt)
+  }
+
 
   return (
     <div>
       <h1 className="py-4">NFTに入札する</h1>
+      <div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextField {...register("address")} />
+          <TextField {...register("tokenId")} />
+          <Button type="submit">検索</Button>
+        </form>
+      </div>
       {signer ? (
         <div>
           {targetNft ? (
@@ -48,8 +83,8 @@ export const Bid = () => {
               </div>
               <div>{targetNft.description}</div>
               <div>
-                100 tokenで
-                <Button variant="contained">入札</Button>
+                1000 tokenで
+                <Button variant="contained" onClick={() => { encryptedBid(1000) }}>入札</Button>
               </div>
             </div>
           ) : (

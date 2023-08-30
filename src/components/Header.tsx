@@ -8,19 +8,37 @@ import {
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { Web3Context } from "../web3Context";
+import { createInstance, initFhevm } from "fhevmjs";
+
+const networkMap = new Map<string, string>([
+  ["8009", "zama"],
+  ["11155111", "sepolia"]
+])
 
 export const Header = () => {
   const [isProgress, setIsProgress] = useState(false);
 
-  const { provider, signer, setSigner } = useContext(Web3Context);
+  const { provider, signer, setSigner, setInstance } = useContext(Web3Context);
+
+  const initInstance = async () => {
+    const network = await provider.getNetwork();
+    const chainId = +network.chainId.toString();
+    let publicKey = localStorage.getItem(`fhepubkey${chainId}`);
+    if (!publicKey) {
+      publicKey = await provider.call({ from: null, to: '0x0000000000000000000000000000000000000044' });
+      localStorage.setItem('fhepubkey', publicKey ?? "");
+    }
+    return createInstance({ chainId, publicKey: publicKey ?? "" });
+  };
 
   const connectWallet = async () => {
     setIsProgress(true);
     setSigner(await provider.getSigner());
+    await initFhevm();
+    setInstance(await initInstance())
+    // console.log(window.ethereum)
     setIsProgress(false);
   };
-
-  // console.log(signer)
 
   return (
     <Box sx={{ flexGrow: 1 }} className="w-full">
@@ -30,8 +48,8 @@ export const Header = () => {
             <Link className="text-white" to="/">Home</Link>
           </Typography>
           {signer ? (
-            <Typography>walletId: {signer.address}</Typography>
-          ):(
+            <Typography>connected {networkMap.get(window.ethereum.networkVersion)}</Typography>
+          ) : (
             <Button
               color="inherit"
               onClick={connectWallet}
@@ -39,7 +57,7 @@ export const Header = () => {
             >
               connect wallet
             </Button>
-          ) }
+          )}
         </Toolbar>
       </AppBar>
     </Box>
