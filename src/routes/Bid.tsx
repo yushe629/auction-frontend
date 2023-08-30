@@ -9,6 +9,7 @@ import { alchemySettings } from "../config/alchemy";
 import { contractAddressMap } from "../contracts";
 import { Web3Context } from "../web3Context";
 import { bidToken, getAuctionResult } from "../functions";
+import { AuctionTable } from "../AuctionTable";
 
 
 type NftSearchInput = {
@@ -36,7 +37,7 @@ const sampleAuctionList = [
 ]
 
 export const Bid = () => {
-  const { signer, instance, getTokenSignature } = useContext(Web3Context);
+  const { signer, instance, getTokenSignature, setStatusText } = useContext(Web3Context);
   // const classes = useStyles()
 
   const {
@@ -77,7 +78,7 @@ export const Bid = () => {
 
   
   const onSubmit: SubmitHandler<BidInput> = async (data) => {
-    await bidToken(instance, signer, Number(data.amount), data.address, getTokenSignature)
+    await bidToken(instance, signer, Number(data.amount), data.address, getTokenSignature, setStatusText)
     // await encryptedBid(Number(data.amount))
   }
 
@@ -126,13 +127,14 @@ export const Bid = () => {
               label="amount"
               type="number"
             />
-            <Button type="submit">入札</Button>
+            <Button variant="contained" type="submit">入札</Button>
           </form>
 
           <form onSubmit={formObj.handleSubmit(onResultSubmit)}>
             <TextField {...formObj.register('address')} label="address"/>
-            <Button type="submit">結果を見る</Button>
+            <Button variant="contained" type="submit">結果を見る</Button>
           </form>
+          <AuctionTable />
         </div>
       ) : (
         <div>Please connect your wallet.</div>

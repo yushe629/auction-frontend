@@ -1,4 +1,14 @@
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
+import {
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from "@mui/material";
 import { Alchemy, Nft } from "alchemy-sdk";
 import { useContext, useMemo, useState } from "react";
 import { alchemySettings } from "../config/alchemy";
@@ -9,6 +19,7 @@ import { contractAddressMap } from "../contracts";
 import blindAuction from "../abi/BlindAuction.json";
 import { finishAuction, generateAuction, getAuctionList } from "../functions";
 // import sampleNftAbi from "../abi/sampleNftAbi.json"
+import { AuctionTable } from "../AuctionTable";
 
 const alchemy = new Alchemy(alchemySettings);
 
@@ -20,8 +31,8 @@ type AuctionInput = {
 };
 
 type FinishAuctionInput = {
-  address: string
-}
+  address: string;
+};
 
 export const Exhibit = () => {
   const {
@@ -34,11 +45,11 @@ export const Exhibit = () => {
   } = useContext(Web3Context);
   // const classes = useStyles()
 
-  const [isRefresh, setIsRefresh] = useState(false)
+  const [isRefresh, setIsRefresh] = useState(false);
   const refresh = () => {
-    setIsRefresh(true)
+    setIsRefresh(true);
     setIsRefresh(false);
-  }
+  };
 
   // const AuctionList = useMemo(async () => {
   //   return await getAuctionList(signer)
@@ -55,70 +66,47 @@ export const Exhibit = () => {
     return auction;
   };
 
-  const formObj = useForm<FinishAuctionInput>()
+  const formObj = useForm<FinishAuctionInput>();
   const onFinishSubmit: SubmitHandler<FinishAuctionInput> = async (data) => {
-    await finishAuction(signer, data.address, )
-  }
-
+    await finishAuction(signer, data.address);
+  };
 
   const getList = async () => {
-    console.log(await getAuctionList(signer))
-  }
+    console.log(await getAuctionList(signer));
+  };
   return (
     <div>
       <h1 className="py-4">NFTを出品する</h1>
       {signer ? (
         <div>
-          <Button onClick={getList}>list取得</Button>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <TextField
-              defaultValue={0}
-              {...register("tokenId")}
-              label="tokenId"
-              type="number"
-            />
-            <TextField
-              defaultValue={600}
-              {...register("biddingTime")}
-              label="biddingTime"
-              type="number"
-            />
-            <Button type="submit">開始</Button>
-          </form>
+          {/* <Button onClick={getList}>list取得</Button> */}
+          <div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <TextField
+                defaultValue={0}
+                {...register("tokenId")}
+                label="tokenId"
+                type="number"
+              />
+              <TextField
+                defaultValue={600}
+                {...register("biddingTime")}
+                label="biddingTime"
+                type="number"
+              />
+              <Button variant="contained" type="submit">開始</Button>
+            </form>
+          </div>
 
-          <form onSubmit={formObj.handleSubmit(onFinishSubmit)}>
-            <TextField {...formObj.register('address')} label="address"/>
-            <Button type="submit">結果を見る</Button>
-          </form>
-          {/* <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer> */}
+          <div>
+            <form onSubmit={formObj.handleSubmit(onFinishSubmit)} className="block">
+              <TextField {...formObj.register("address")} label="address" />
+              <Button type="submit" variant="contained">
+                結果を見る
+              </Button>
+            </form>
+          </div>
+          <AuctionTable />
         </div>
       ) : (
         <div>Please connect your wallet.</div>

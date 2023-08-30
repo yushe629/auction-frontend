@@ -48,7 +48,7 @@ export const Header = () => {
           </Typography>
           {signer ? (
             // <Typography>connected {networkMap.get(window.ethereum.networkVersion)} </Typography>
-            <Typography>walledAddress: {signer.address}</Typography>
+            <Typography>walletAddress: {signer.address}</Typography>
           ) : (
             <Button
               color="inherit"

@@ -47,6 +47,8 @@ export function Web3ContextProvider(props: { children: React.ReactNode }) {
     }
   };
 
+  const [statusText, setStatusText] = useState("")
+
   const [auctionAddressList, setAuctionAddressList] = useState<string[]>([])
 
   const value: web3ContextProps = {
@@ -61,7 +63,9 @@ export function Web3ContextProvider(props: { children: React.ReactNode }) {
     setNftList,
     instance,
     setInstance,
-    getTokenSignature, auctionAddressList, setAuctionAddressList
+    getTokenSignature, auctionAddressList, setAuctionAddressList,
+    statusText,
+    setStatusText
   };
 
   return (

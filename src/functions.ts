@@ -47,7 +47,8 @@ export const bidToken = async (
   signer: ethers.JsonRpcSigner,
   amount: number,
   auctionAddress: string,
-  getTokenSignature: (arg: string) => Promise<{ publicKey: Uint8Array, signature: string }>
+  getTokenSignature: (arg: string) => Promise<{ publicKey: Uint8Array, signature: string }>,
+  setStatusText: (arg: string) => void
 ) => {
   const contractAddress = contractAddressMap.EncryptedERC20;
   await getTokenSignature(contractAddress);
@@ -55,8 +56,11 @@ export const bidToken = async (
   const ercContract = new ethers.Contract(contractAddress, encErc20Abi, signer);
 
   // mint erc20
+  setStatusText("minting Encrypted ERC 20 token")
   const tx = await ercContract.mint(encryptedAmount);
   await tx.wait();
+  setStatusText("minting Encrypted ERC 20 token")
+
 
   console.log("mint erc20 completed.")
 
