@@ -61,23 +61,25 @@ export const Bid = () => {
   //   setIsGettingNftInfo(false);
   // };
 
-  const onSubmit: SubmitHandler<BidInput> = async (data) => {
-    await bidToken(instance, signer, data.amount, data.address, getTokenSignature)
+
+  const encryptedBid = async (amount: number) => {
+    const address = contractAddressMap.EncryptedERC20
+    // use readonly data
+    const { signature, publicKey } = await getTokenSignature(address)
+    const encryptedAmount = instance.encrypt32(amount)
+  
+    const contract = new ethers.Contract(address, encErc20Abi, signer)
+  
+    const tx = await contract.mint(encryptedAmount);
+    const receipt = await tx.wait();
+    console.log(receipt)
   }
 
-  // const encryptedBid = async (amount: number) => {
-  //   const address = contractAddressMap.EncryptedERC20
-  //   // use readonly data
-  //   const { signature, publicKey } = await getTokenSignature(address, signer.address)
-  //   const encryptedAmount = instance.encrypt32(amount)
   
-  //   const contract = new ethers.Contract(address, encErc20Abi, signer)
-  
-  //   const tx = await contract.mint(encryptedAmount);
-  //   const receipt = await tx.wait();
-  //   console.log(receipt)
-  // }
-
+  const onSubmit: SubmitHandler<BidInput> = async (data) => {
+    await bidToken(instance, signer, Number(data.amount), data.address, getTokenSignature)
+    // await encryptedBid(Number(data.amount))
+  }
 
   return (
     <div>

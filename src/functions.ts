@@ -51,21 +51,29 @@ export const bidToken = async (
 ) => {
   const contractAddress = contractAddressMap.EncryptedERC20;
   await getTokenSignature(contractAddress);
-  const encryptedAmount = instance.encrypt32(Number(amount));
+  const encryptedAmount = instance.encrypt32(amount);
   const ercContract = new ethers.Contract(contractAddress, encErc20Abi, signer);
 
   // mint erc20
   const tx = await ercContract.mint(encryptedAmount);
   await tx.wait();
 
+  console.log("mint erc20 completed.")
+
   // approve erc20
   const tx2 = await ercContract.approve(auctionAddress, encryptedAmount);
   await tx2.wait();
 
+  console.log("approve erc20 completed.")
+
   // bid at auction contract
-  const c2 = new ethers.Contract(auctionAddress, blindAuctionAbi, signer);
-  const tx3 = await c2.bid(encryptedAmount);
+  await getTokenSignature(auctionAddress)
+  const encValue = instance.encrypt32(amount)
+  const c2 = new ethers.Contract(auctionAddress, Erc721AuctionAbi, signer);
+  const tx3 = await c2.bid(encValue);
   const r3 = await tx3.wait();
+
+  console.log("bid completed")
 
   return r3;
 };
