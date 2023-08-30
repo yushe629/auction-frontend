@@ -16,6 +16,8 @@ type web3ContextProps = {
   instance: FhevmInstance;
   setInstance: (arg: FhevmInstance) => void;
   getTokenSignature: (arg: string) => Promise<{ publicKey: Uint8Array, signature: string }>
+  auctionAddressList: string[]
+  setAuctionAddressList: (arg: string[]) => void
 }
 
 export const Web3Context = createContext<web3ContextProps | null>(null);

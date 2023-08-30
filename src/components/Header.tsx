@@ -36,7 +36,6 @@ export const Header = () => {
     setSigner(await provider.getSigner());
     await initFhevm();
     setInstance(await initInstance())
-    // console.log(window.ethereum)
     setIsProgress(false);
   };
 
@@ -48,7 +47,8 @@ export const Header = () => {
             <Link className="text-white" to="/">Home</Link>
           </Typography>
           {signer ? (
-            <Typography>connected {networkMap.get(window.ethereum.networkVersion)}</Typography>
+            // <Typography>connected {networkMap.get(window.ethereum.networkVersion)} </Typography>
+            <Typography>walledAddress: {signer.address}</Typography>
           ) : (
             <Button
               color="inherit"

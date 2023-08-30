@@ -5,27 +5,18 @@ import { Link } from "react-router-dom";
 import { Faucet } from "../components/Faucet";
 
 export const Home = () => {
-  const context = useContext(Web3Context);
 
   return (
     <div>
-      <h1>Welcome to Blind NFT Auction!</h1>
-      <div>
+      <h1 className="py-4">Welcome to Blind NFT Auction!</h1>
+      <div className="flex flex-col">
         <Button>
-          <Link to="/Exhibit">Exhibit</Link>
+          <Link className="text-xl w-full h-full" to="/Exhibit">出品</Link>
         </Button>
         <Button>
-          <Link to="/Bid">Bid</Link>
+          <Link className="text-xl w-full h-full" to="/Bid">入札</Link>
         </Button>
       </div>
-      <div>count: {context?.count}</div>
-      <Button
-        onClick={() => {
-          context?.setCount(context.count + 1);
-        }}
-      >
-        increment
-      </Button>
       <Faucet />
     </div>
   );
