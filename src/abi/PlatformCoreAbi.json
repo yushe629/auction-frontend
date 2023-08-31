@@ -1,39 +1,4 @@
-
 [
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "auctionType",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "biddingTime",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bool",
-				"name": "isStoppable",
-				"type": "bool"
-			}
-		],
-		"name": "registerAuction",
-		"outputs": [
-			{
-				"internalType": "contract BlindAuction",
-				"name": "auction",
-				"type": "address"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
 	{
 		"inputs": [
 			{
@@ -49,6 +14,19 @@
 		],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
+	},
+	{
+		"inputs": [],
+		"name": "ERC721Contract",
+		"outputs": [
+			{
+				"internalType": "contract Adam721Like",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -88,19 +66,6 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "ERC721Contract",
-		"outputs": [
-			{
-				"internalType": "contract Adam721Like",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -117,6 +82,40 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "auctionType",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "biddingTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "isStoppable",
+				"type": "bool"
+			}
+		],
+		"name": "registerAuction",
+		"outputs": [
+			{
+				"internalType": "contract BlindAuction",
+				"name": "auction",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]

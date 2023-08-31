@@ -8,7 +8,7 @@ import encErc20Abi from "../abi/EncryptedERC20Abi.json";
 import { alchemySettings } from "../config/alchemy";
 import { contractAddressMap } from "../contracts";
 import { Web3Context } from "../web3Context";
-import { bidToken, getAuctionResult } from "../functions";
+import { bidToken, getAuctionResult, getBidStatus } from "../functions";
 import { AuctionTable } from "../AuctionTable";
 
 
@@ -51,6 +51,9 @@ export const Bid = () => {
   const formObj = useForm<ResultInput>()
   const onResultSubmit: SubmitHandler<ResultInput> = async (data) => {
     await getAuctionResult(instance, signer, data.address, getTokenSignature)
+
+    // sample getBid
+    // await getBidStatus(instance, signer, data.address, getTokenSignature, setStatusText)
   }
 
   // const [targetNft, setTargetNft] = useState<Nft | null>(null);

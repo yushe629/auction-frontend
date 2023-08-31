@@ -4,5 +4,5 @@ export const contractAddressMap = {
     BlindAuction: "",
     ERC721BlindAuction: "",
     EncryptedERC20: "0x357Cd7EEeA8abf6b339148Ad01f0Ea109187Fc69",
-    PlatformCore: "0x0288b64dD4B6479911683B8c688F12e075b790D3",
+    PlatformCore: "0x8a64EDC72EFEd1bf0D08FaBE5f8c745B5149B255",
 }

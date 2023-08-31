@@ -82,6 +82,25 @@ export const bidToken = async (
   return r3;
 };
 
+export const getBidStatus = async (
+  instance: FhevmInstance,
+  signer: ethers.JsonRpcSigner,
+  auctionAddress: string,
+  getTokenSignature: (arg: string) => Promise<{ publicKey: Uint8Array, signature: string }>,
+  setStatusText: (arg: string) => void
+) => {
+  const contractAddress = contractAddressMap.EncryptedERC20;
+  const {publicKey, signature} = await getTokenSignature(contractAddress);
+
+  const c = new ethers.Contract(auctionAddress, Erc721AuctionAbi, signer);
+  const result = await c.getBid(publicKey, signature);
+  const decoded = instance.decrypt(contractAddress, result)
+
+  console.log(decoded)
+  return decoded
+
+}
+
 export const getAuctionResult = async (
   instance: FhevmInstance,
   signer: ethers.JsonRpcSigner,
@@ -90,7 +109,7 @@ export const getAuctionResult = async (
 ) => {
   const contractAddress = contractAddressMap.EncryptedERC20;
   const { publicKey, signature } = await getTokenSignature(
-    contractAddress,
+    auctionAddress,
   );
 
   // doIHaveHighestBid at auction contract
@@ -98,11 +117,12 @@ export const getAuctionResult = async (
   // using nft auction
   const c2 = new ethers.Contract(auctionAddress, Erc721AuctionAbi, signer);
   const tx3 = await c2.doIHaveHighestBid(publicKey, signature);
-  const r3 = await tx3.wait();
 
-  const result = instance.decrypt(contractAddress, r3);
+  const result = instance.decrypt(auctionAddress, tx3);
+  
+  console.log(result)
 
-  if (result === 0) {
+  if (result === 1) {
     const tx = await c2.claim();
     await tx.wait();
     console.log("win")
@@ -157,7 +177,7 @@ export const finishAuction = async (
 	const c = new ethers.Contract(
 		auctionAddress, Erc721AuctionAbi, signer
 	)
-	const tx = await c.auctionEnded()
+	const tx = await c.auctionEnd()
 	const r = await tx.wait()
 	return r;
 };
