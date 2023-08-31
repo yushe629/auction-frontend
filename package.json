@@ -14,6 +14,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.7",
     "alchemy-sdk": "^2.10.0",
+    "dayjs": "^1.11.9",
     "ethers": "^6.7.1",
     "fhevmjs": "^0.2.0",
     "react": "^18.2.0",

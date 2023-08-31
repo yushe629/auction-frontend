@@ -3,6 +3,6 @@ export const contractAddressMap = {
     // generate auction address for each auction
     BlindAuction: "",
     ERC721BlindAuction: "",
-    EncryptedERC20: "0x357Cd7EEeA8abf6b339148Ad01f0Ea109187Fc69",
-    PlatformCore: "0x8a64EDC72EFEd1bf0D08FaBE5f8c745B5149B255",
+    EncryptedERC20: "0x8F10E9EC2c283a2a1759506Fa0f5b6016DF3Ae28",
+    PlatformCore: "0xa9074F971d949E66E1a74d0d173038083dFA9c98",
 }

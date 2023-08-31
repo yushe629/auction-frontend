@@ -37,7 +37,7 @@ const sampleAuctionList = [
 ]
 
 export const Bid = () => {
-  const { signer, instance, getTokenSignature, setStatusText } = useContext(Web3Context);
+  const { signer, instance, getTokenSignature, setStatus } = useContext(Web3Context);
   // const classes = useStyles()
 
   const {
@@ -50,7 +50,7 @@ export const Bid = () => {
 
   const formObj = useForm<ResultInput>()
   const onResultSubmit: SubmitHandler<ResultInput> = async (data) => {
-    await getAuctionResult(instance, signer, data.address, getTokenSignature)
+    await getAuctionResult(instance, signer, data.address, getTokenSignature, setStatus)
 
     // sample getBid
     // await getBidStatus(instance, signer, data.address, getTokenSignature, setStatusText)
@@ -81,7 +81,7 @@ export const Bid = () => {
 
   
   const onSubmit: SubmitHandler<BidInput> = async (data) => {
-    await bidToken(instance, signer, Number(data.amount), data.address, getTokenSignature, setStatusText)
+    await bidToken(instance, signer, Number(data.amount), data.address, getTokenSignature, setStatus)
     // await encryptedBid(Number(data.amount))
   }
 

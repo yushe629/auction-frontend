@@ -18,6 +18,8 @@ type web3ContextProps = {
   getTokenSignature: (arg: string) => Promise<{ publicKey: Uint8Array, signature: string }>
   auctionAddressList: string[]
   setAuctionAddressList: (arg: string[]) => void
+  status: {text:string, severity: string},
+  setStatus: (arg: {text:string, severity: string}) => void
 }
 
 export const Web3Context = createContext<web3ContextProps | null>(null);
@@ -47,7 +49,7 @@ export function Web3ContextProvider(props: { children: React.ReactNode }) {
     }
   };
 
-  const [statusText, setStatusText] = useState("")
+  const [status, setStatus] = useState<{text:string, severity: string}>({text: "", severity: "info"})
 
   const [auctionAddressList, setAuctionAddressList] = useState<string[]>([])
 
@@ -64,8 +66,8 @@ export function Web3ContextProvider(props: { children: React.ReactNode }) {
     instance,
     setInstance,
     getTokenSignature, auctionAddressList, setAuctionAddressList,
-    statusText,
-    setStatusText
+    status,
+    setStatus
   };
 
   return (

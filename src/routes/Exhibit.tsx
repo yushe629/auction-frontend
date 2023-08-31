@@ -42,6 +42,7 @@ export const Exhibit = () => {
     setNftList,
     auctionAddressList,
     setAuctionAddressList,
+    setStatus
   } = useContext(Web3Context);
   // const classes = useStyles()
 
@@ -61,14 +62,15 @@ export const Exhibit = () => {
     const auction = await generateAuction(
       signer,
       data.tokenId,
-      data.biddingTime
+      data.biddingTime,
+      setStatus
     );
     return auction;
   };
 
   const formObj = useForm<FinishAuctionInput>();
   const onFinishSubmit: SubmitHandler<FinishAuctionInput> = async (data) => {
-    await finishAuction(signer, data.address);
+    await finishAuction(signer, data.address, setStatus);
   };
 
   const getList = async () => {
@@ -102,7 +104,7 @@ export const Exhibit = () => {
             <form onSubmit={formObj.handleSubmit(onFinishSubmit)} className="block">
               <TextField {...formObj.register("address")} label="address" />
               <Button type="submit" variant="contained">
-                結果を見る
+                終了する
               </Button>
             </form>
           </div>
