@@ -87,7 +87,7 @@ export const Bid = () => {
 
   return (
     <div>
-      <h1 className="py-4">NFTに入札する</h1>
+      <h1 className="py-8">Bidding</h1>
       {/* <div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField {...register("address")} />
@@ -96,7 +96,7 @@ export const Bid = () => {
         </form>
       </div> */}
       {signer ? (
-        <div>
+        <div className="flex flex-col gap-4">
           {/* {targetNft ? (
             <div className="flex items-center justify-around">
               <div className="max-w-sm">
@@ -119,23 +119,31 @@ export const Bid = () => {
           )} */}
 
           <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex justify-center gap-4 items-center">
+              <div>オークションに入札</div>
             <TextField
               defaultValue={0}
               {...register("address")}
               label="auctionAddress"
             />
             <TextField
-              defaultValue={600}
+              defaultValue={1000}
               {...register("amount")}
-              label="amount"
+              label="Token Amount"
               type="number"
             />
             <Button variant="contained" type="submit">入札</Button>
+            </div>
+            
           </form>
 
           <form onSubmit={formObj.handleSubmit(onResultSubmit)}>
-            <TextField {...formObj.register('address')} label="address"/>
-            <Button variant="contained" type="submit">結果を見る</Button>
+            <div className="flex items-center gap-4 justify-center">
+              <div>オークション結果を確認</div>
+            <TextField {...formObj.register('address')} label="auctionAddress"/>
+            <Button variant="contained" type="submit">確認</Button>
+
+            </div>
           </form>
           <AuctionTable />
         </div>

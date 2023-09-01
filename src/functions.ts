@@ -52,6 +52,7 @@ export const bidToken = async (
 ) => {
   const contractAddress = contractAddressMap.EncryptedERC20;
   await getTokenSignature(contractAddress);
+
   const encryptedAmount = instance.encrypt32(amount);
   const ercContract = new ethers.Contract(contractAddress, encErc20Abi, signer);
 
@@ -86,7 +87,7 @@ export const getBidStatus = async (
   signer: ethers.JsonRpcSigner,
   auctionAddress: string,
   getTokenSignature: (arg: string) => Promise<{ publicKey: Uint8Array, signature: string }>,
-  setStatus: (arg: {text: string, serevity: string}) => void
+  setStatus: (arg: {text: string, severity: string}) => void
 ) => {
   const contractAddress = contractAddressMap.EncryptedERC20;
   const {publicKey, signature} = await getTokenSignature(contractAddress);
@@ -105,7 +106,7 @@ export const getAuctionResult = async (
   signer: ethers.JsonRpcSigner,
   auctionAddress: string,
   getTokenSignature: (arg: string) => Promise<{ publicKey: Uint8Array, signature: string }>,
-  setStatus: (arg: {text: string, serevity: string}) => void
+  setStatus: (arg: {text: string, severity: string}) => void
 ) => {
   // const contractAddress = contractAddressMap.EncryptedERC20;
   const { publicKey, signature } = await getTokenSignature(
@@ -115,10 +116,10 @@ export const getAuctionResult = async (
   // doIHaveHighestBid at auction contract
   // const c2 = new ethers.Contract(auctionAddress, blindAuctionAbi, signer);
   // using nft auction
-  setStatus({text: "requesting doIHaveHighestBid", serevity: "info"})
+  setStatus({text: "requesting doIHaveHighestBid", severity: "info"})
   const c2 = new ethers.Contract(auctionAddress, Erc721AuctionAbi, signer);
   const tx3 = await c2.doIHaveHighestBid(publicKey, signature);
-  setStatus({text: "requesting doIHaveHighestBid completed", serevity: "success"})
+  setStatus({text: "requesting doIHaveHighestBid completed", severity: "success"})
 
 
   const result = instance.decrypt(auctionAddress, tx3);
@@ -126,17 +127,17 @@ export const getAuctionResult = async (
   console.log(result)
 
   if (result === 1) {
-    setStatus({text: "Your bid was highest. Now claiming.", serevity: "info"})
+    setStatus({text: "Your bid was highest. Now claiming.", severity: "info"})
     const tx = await c2.claim();
     await tx.wait();
-    setStatus({text: "Claiming was completed", serevity: "success"})
+    setStatus({text: "Claiming was completed", severity: "success"})
     // console.log("win")
 	// return instance.decrypt(contractAddress, r);
   } else {
-    setStatus({text: "Your bid was not highest. Now Withdrawing", serevity: "info"})
+    setStatus({text: "Your bid was not highest. Now Withdrawing", severity: "info"})
     const tx = await c2.withdraw();
     await tx.wait();
-    setStatus({text: "Withdrawing was completed", serevity: "success"})
+    setStatus({text: "Withdrawing was completed", severity: "success"})
     // console.log("lose")
 	// return instance.decrypt(contractAddress, r);
   }
@@ -153,14 +154,14 @@ export const generateAuction = async (
   signer: ethers.JsonRpcSigner,
   tokenId: number,
   biddingTime: number,
-  setStatus: (arg: {text: string, serevity: string}) => void
+  setStatus: (arg: {text: string, severity: string}) => void
 ) => {
   const c = new ethers.Contract(
     contractAddressMap.PlatformCore,
     PlatformAbi,
     signer
   );
-  setStatus({text: "registering Auction", serevity:"info"})
+  setStatus({text: "registering Auction", severity:"info"})
   // auctionType is 0: first-price and isStoppable is false.
   const tx = await c.registerAuction(tokenId, 0, biddingTime, false);
   await tx.wait();
@@ -172,15 +173,15 @@ export const generateAuction = async (
   console.log(auctionAddress)
   const auctionContract = new ethers.Contract(auctionAddress, Erc721AuctionAbi, signer)
   const unixtime = await auctionContract.endTime()
-  const deadLine = new Date(Number(unixtime) * 1000).toString()
-  setStatus({text: `registered Auction. Auction address is ${auctionAddress}, deadLine: ${deadLine}`,  serevity:"success"})
+  const deadLine = new Date(Number(unixtime) * 1000).toLocaleString()
+  setStatus({text: `registered Auction. Auction address is ${auctionAddress}, deadLine: ${deadLine}`,  severity:"success"})
   
   // approve nft to auction
-  setStatus({text: `Auction address is ${auctionAddress}, deadLine: ${deadLine}. now approving NFT`, serevity:"info"})
+  setStatus({text: `Auction address is ${auctionAddress}, deadLine: ${deadLine}. now approving NFT`, severity:"info"})
   const nftContract = new ethers.Contract(contractAddressMap.Adam721Like, Adam721Abi, signer)
   const approveTx = await nftContract.approve(auctionAddress, tokenId);
   const result = await approveTx.wait();
-  setStatus({text: `Auction address is ${auctionAddress}., deadLine: ${deadLine} approving was completed.`, serevity:"success"})
+  setStatus({text: `Auction address is ${auctionAddress}., deadLine: ${deadLine} approving was completed.`, severity:"success"})
 
 
   return result;
@@ -190,16 +191,16 @@ export const generateAuction = async (
 export const finishAuction = async (
 	signer: ethers.JsonRpcSigner,
 	auctionAddress: string,
-  setStatus: (arg: {text: string, serevity: string}) => void
+  setStatus: (arg: {text: string, severity: string}) => void
 ) => {
 	const c = new ethers.Contract(
 		auctionAddress, Erc721AuctionAbi, signer
 	)
-  setStatus({text: "Finishing Auction", serevity: "info"})
+  setStatus({text: "Finishing Auction", severity: "info"})
 
 	const tx = await c.auctionEnd()
 	const r = await tx.wait()
-  setStatus({text: "Finishing Completed", serevity: "success"})
+  setStatus({text: "Finishing Completed", severity: "success"})
 
 	return r;
 };

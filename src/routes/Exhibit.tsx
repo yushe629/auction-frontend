@@ -42,7 +42,7 @@ export const Exhibit = () => {
     setNftList,
     auctionAddressList,
     setAuctionAddressList,
-    setStatus
+    setStatus,
   } = useContext(Web3Context);
   // const classes = useStyles()
 
@@ -78,34 +78,45 @@ export const Exhibit = () => {
   };
   return (
     <div>
-      <h1 className="py-4">NFTを出品する</h1>
+      <h1 className="py-8">NFTの出品</h1>
       {signer ? (
-        <div>
+        <div className="flex flex-col gap-8">
           {/* <Button onClick={getList}>list取得</Button> */}
-          <div>
+          <div className="flex justify-center items-center gap-4">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <TextField
-                defaultValue={0}
-                {...register("tokenId")}
-                label="tokenId"
-                type="number"
-              />
-              <TextField
-                defaultValue={600}
-                {...register("biddingTime")}
-                label="biddingTime"
-                type="number"
-              />
-              <Button variant="contained" type="submit">開始</Button>
+              <div className="flex items-center gap-4">
+                <div>新規オークション作成</div>
+                <TextField
+                  defaultValue={0}
+                  {...register("tokenId")}
+                  label="tokenId"
+                  type="number"
+                />
+                <TextField
+                  defaultValue={600}
+                  {...register("biddingTime")}
+                  label="biddingTime"
+                  type="number"
+                />
+                <Button variant="contained" type="submit">
+                  開始
+                </Button>
+              </div>
             </form>
           </div>
 
           <div>
-            <form onSubmit={formObj.handleSubmit(onFinishSubmit)} className="block">
-              <TextField {...formObj.register("address")} label="address" />
-              <Button type="submit" variant="contained">
-                終了する
-              </Button>
+            <form
+              onSubmit={formObj.handleSubmit(onFinishSubmit)}
+              className="block"
+            >
+              <div className="flex justify-center gap-4 items-center">
+                <div>オークションの終了</div>
+                <TextField {...formObj.register("address")} label="auctionAddress" />
+                <Button type="submit" variant="contained">
+                  終了
+                </Button>
+              </div>
             </form>
           </div>
           <AuctionTable />

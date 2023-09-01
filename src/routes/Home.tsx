@@ -8,13 +8,16 @@ export const Home = () => {
 
   return (
     <div>
-      <h1 className="py-4">Welcome to Blind NFT Auction!</h1>
+      <h1 className="py-4">Welcome to NFT Blind Auction!</h1>
       <div className="flex flex-col">
         <Button>
-          <Link className="text-xl w-full h-full" to="/Exhibit">出品</Link>
+          <Link className="text-xl w-full h-full" to="/Exhibit">Create Auction</Link>
         </Button>
         <Button>
-          <Link className="text-xl w-full h-full" to="/Bid">入札</Link>
+          <Link className="text-xl w-full h-full" to="/Bid">Bidding</Link>
+        </Button>
+        <Button>
+          <Link className="text-xl w-full h-full" to="/Bid">Mint NFT</Link>
         </Button>
       </div>
       <Faucet />
